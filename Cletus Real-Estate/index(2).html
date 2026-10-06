@@ -1,0 +1,3475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cletus Real-Estate | Luxury Living</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+:root{
+    --green:#1f8f55;
+    --green-light:#35c979;
+    --green-dark:#12683c;
+
+    --black:#090b0a;
+    --black-2:#111513;
+    --white:#ffffff;
+    --off-white:#f4f6f3;
+    --gray:#6b726d;
+
+    --border:rgba(31,143,85,.18);
+}
+
+html{
+    overflow-x:hidden;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--off-white);
+    color:#101311;
+    line-height:1.6;
+    overflow-x:hidden;
+    transition:.4s ease;
+}
+
+body.dark{
+    background:#070908;
+    color:#f4f7f5;
+}
+
+img{
+    width:100%;
+    display:block;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
+
+
+/* =====================================================
+   CUSTOM SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#0b0e0c;
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--green);
+    border-radius:20px;
+}
+
+
+/* =====================================================
+   PAGE LOADER
+===================================================== */
+
+.loader{
+    position:fixed;
+    inset:0;
+    background:#070908;
+    z-index:9999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:opacity .8s ease, visibility .8s ease;
+}
+
+.loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loader-inner{
+    text-align:center;
+}
+
+.loader-logo{
+    font-size:32px;
+    font-weight:900;
+    color:white;
+    letter-spacing:-1px;
+    margin-bottom:18px;
+}
+
+.loader-logo span{
+    color:var(--green-light);
+}
+
+.loader-line{
+    width:220px;
+    height:3px;
+    background:#242b27;
+    overflow:hidden;
+    border-radius:10px;
+}
+
+.loader-line::after{
+    content:"";
+    display:block;
+    width:45%;
+    height:100%;
+    background:var(--green-light);
+    animation:loaderMove 1.2s infinite ease-in-out;
+}
+
+
+/* =====================================================
+   SCROLL PROGRESS
+===================================================== */
+
+.scroll-progress{
+    position:fixed;
+    top:0;
+    left:0;
+    height:3px;
+    width:0%;
+    background:var(--green-light);
+    z-index:10000;
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:20px 7%;
+
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid rgba(0,0,0,.05);
+
+    transition:.4s ease;
+}
+
+body.dark .navbar{
+    background:rgba(7,9,8,.88);
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:-1px;
+    white-space:nowrap;
+}
+
+.logo span{
+    color:var(--green);
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:32px;
+    list-style:none;
+}
+
+.nav-links a{
+    font-size:14px;
+    font-weight:700;
+    position:relative;
+    transition:.3s ease;
+}
+
+.nav-links a::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-7px;
+    width:0;
+    height:2px;
+    background:var(--green);
+    transition:.3s ease;
+}
+
+.nav-links a:hover{
+    color:var(--green);
+}
+
+.nav-links a:hover::after{
+    width:100%;
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+
+/* =====================================================
+   DARK MODE SLIDING TOGGLE
+===================================================== */
+
+.theme-switch{
+    position:relative;
+
+    width:62px;
+    height:32px;
+
+    border:none;
+    border-radius:30px;
+
+    background:#d8ded9;
+
+    cursor:pointer;
+
+    transition:.4s ease;
+}
+
+.theme-switch::before{
+    content:"☀";
+    position:absolute;
+
+    left:4px;
+    top:4px;
+
+    width:24px;
+    height:24px;
+
+    border-radius:50%;
+
+    background:white;
+    color:#333;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:13px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.2);
+
+    transition:.4s cubic-bezier(.68,-.55,.27,1.55);
+}
+
+.theme-switch.active{
+    background:var(--green);
+}
+
+.theme-switch.active::before{
+    content:"☾";
+    left:34px;
+    background:#101512;
+    color:#fff;
+}
+
+
+/* =====================================================
+   MOBILE MENU
+===================================================== */
+
+.menu-btn{
+    display:none;
+
+    width:42px;
+    height:42px;
+
+    border:none;
+    border-radius:8px;
+
+    background:var(--black);
+    color:white;
+
+    font-size:20px;
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+    min-height:100vh;
+
+    padding:150px 7% 90px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    align-items:center;
+
+    gap:65px;
+
+    position:relative;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 25%,
+            rgba(31,143,85,.12),
+            transparent 30%
+        );
+}
+
+body.dark .hero{
+    background:
+        radial-gradient(
+            circle at 15% 25%,
+            rgba(31,143,85,.16),
+            transparent 30%
+        );
+}
+
+.hero-orb{
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    border-radius:50%;
+
+    background:rgba(31,143,85,.07);
+
+    right:-100px;
+    top:180px;
+
+    animation:orbFloat 7s ease-in-out infinite;
+}
+
+.hero-orb.two{
+    width:180px;
+    height:180px;
+
+    right:45%;
+    bottom:-100px;
+
+    animation-delay:1.5s;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+
+    animation:heroText .9s ease forwards;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+
+    color:var(--green);
+
+    font-size:13px;
+    font-weight:900;
+
+    letter-spacing:2px;
+
+    margin-bottom:20px;
+}
+
+.eyebrow::before{
+    content:"";
+    width:35px;
+    height:2px;
+    background:var(--green);
+}
+
+.hero h1{
+    font-size:clamp(48px,6.5vw,82px);
+
+    line-height:.98;
+
+    letter-spacing:-4px;
+
+    margin-bottom:27px;
+
+    max-width:720px;
+}
+
+.hero h1 span{
+    color:var(--green);
+}
+
+.hero p{
+    max-width:580px;
+
+    color:var(--gray);
+
+    font-size:17px;
+
+    margin-bottom:32px;
+}
+
+body.dark .hero p{
+    color:#a9b2ad;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:13px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    border:none;
+
+    padding:15px 24px;
+
+    border-radius:7px;
+
+    font-size:14px;
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:.35s ease;
+}
+
+.btn-green{
+    background:var(--green);
+    color:white;
+}
+
+.btn-green:hover{
+    background:var(--green-dark);
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(31,143,85,.25);
+}
+
+.btn-dark{
+    background:var(--black);
+    color:white;
+}
+
+body.dark .btn-dark{
+    background:white;
+    color:#111;
+}
+
+.btn-dark:hover{
+    transform:translateY(-4px);
+}
+
+
+/* =====================================================
+   HERO VISUAL
+===================================================== */
+
+.hero-visual{
+    position:relative;
+
+    animation:heroImage 1.1s ease forwards;
+}
+
+.hero-image-wrap{
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:24px;
+
+    box-shadow:
+        0 30px 70px rgba(0,0,0,.2);
+}
+
+.hero-image-wrap::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 30%,
+            rgba(255,255,255,.18),
+            transparent 70%
+        );
+
+    transform:translateX(-120%);
+
+    animation:shine 4s ease-in-out infinite;
+}
+
+.hero-image{
+    height:600px;
+    object-fit:cover;
+
+    transition:transform 1s ease;
+}
+
+.hero-image-wrap:hover .hero-image{
+    transform:scale(1.06);
+}
+
+.hero-badge{
+    position:absolute;
+
+    left:-25px;
+    bottom:30px;
+
+    background:rgba(8,11,9,.92);
+
+    color:white;
+
+    padding:18px 21px;
+
+    border-radius:12px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+
+    animation:badgeFloat 4s ease-in-out infinite;
+}
+
+.hero-badge strong{
+    display:block;
+
+    font-size:25px;
+
+    color:var(--green-light);
+}
+
+.hero-badge span{
+    font-size:12px;
+    color:#b9c0bc;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    background:var(--black);
+
+    color:white;
+}
+
+.stat{
+    padding:42px 20px;
+
+    text-align:center;
+
+    border-right:1px solid rgba(255,255,255,.08);
+}
+
+.stat:last-child{
+    border-right:none;
+}
+
+.stat-number{
+    font-size:38px;
+    font-weight:900;
+
+    color:var(--green-light);
+
+    margin-bottom:4px;
+}
+
+.stat p{
+    color:#aab1ad;
+    font-size:13px;
+}
+
+
+/* =====================================================
+   GENERAL SECTION
+===================================================== */
+
+section:not(.hero):not(.stats){
+    padding:110px 7%;
+}
+
+.section-top{
+    max-width:700px;
+    margin-bottom:55px;
+}
+
+.section-label{
+    color:var(--green);
+
+    font-size:12px;
+    font-weight:900;
+
+    letter-spacing:2px;
+
+    margin-bottom:10px;
+}
+
+.section-top h2{
+    font-size:clamp(34px,4.5vw,57px);
+
+    line-height:1;
+
+    letter-spacing:-2px;
+
+    margin-bottom:17px;
+}
+
+.section-top p{
+    color:var(--gray);
+}
+
+body.dark .section-top p{
+    color:#a9b2ad;
+}
+
+
+/* =====================================================
+   PROPERTY FILTER
+===================================================== */
+
+.property-tools{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:35px;
+
+    flex-wrap:wrap;
+}
+
+.filter-buttons{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.filter-btn{
+    border:1px solid var(--border);
+
+    background:transparent;
+
+    color:inherit;
+
+    padding:10px 16px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+    font-size:13px;
+    font-weight:800;
+
+    transition:.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active{
+    background:var(--green);
+    border-color:var(--green);
+    color:white;
+}
+
+.property-search{
+    display:flex;
+    align-items:center;
+
+    border:1px solid var(--border);
+
+    border-radius:8px;
+
+    overflow:hidden;
+
+    background:transparent;
+}
+
+.property-search input{
+    width:190px;
+
+    border:none;
+    outline:none;
+
+    padding:11px 13px;
+
+    background:transparent;
+    color:inherit;
+}
+
+.property-search button{
+    border:none;
+
+    background:var(--black);
+
+    color:white;
+
+    padding:12px 15px;
+
+    cursor:pointer;
+}
+
+body.dark .property-search button{
+    background:var(--green);
+}
+
+
+/* =====================================================
+   PROPERTY GRID
+===================================================== */
+
+.property-grid{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+}
+
+.property-card{
+    background:white;
+
+    border:1px solid rgba(0,0,0,.06);
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .45s ease;
+
+    transform-style:preserve-3d;
+}
+
+body.dark .property-card{
+    background:#111512;
+    border-color:rgba(255,255,255,.07);
+}
+
+.property-card:hover{
+    transform:translateY(-12px) rotateX(2deg) rotateY(-2deg);
+
+    box-shadow:
+        0 30px 55px rgba(0,0,0,.16);
+}
+
+.property-image{
+    height:250px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.property-image img{
+    height:100%;
+    object-fit:cover;
+
+    transition:transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.property-card:hover .property-image img{
+    transform:scale(1.1);
+}
+
+.property-tag{
+    position:absolute;
+
+    top:15px;
+    left:15px;
+
+    background:var(--green);
+
+    color:white;
+
+    padding:6px 10px;
+
+    border-radius:5px;
+
+    font-size:11px;
+    font-weight:900;
+
+    text-transform:uppercase;
+}
+
+.save-btn{
+    position:absolute;
+
+    top:14px;
+    right:14px;
+
+    width:38px;
+    height:38px;
+
+    border:none;
+    border-radius:50%;
+
+    background:rgba(0,0,0,.55);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    transition:.3s ease;
+}
+
+.save-btn:hover,
+.save-btn.saved{
+    background:var(--green);
+    transform:scale(1.1);
+}
+
+.property-info{
+    padding:22px;
+}
+
+.property-info h3{
+    font-size:21px;
+    margin-bottom:6px;
+}
+
+.property-location{
+    color:var(--gray);
+
+    font-size:13px;
+
+    margin-bottom:18px;
+}
+
+.property-details{
+    display:flex;
+
+    gap:15px;
+
+    color:var(--gray);
+
+    font-size:12px;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid rgba(0,0,0,.08);
+}
+
+body.dark .property-details{
+    border-color:rgba(255,255,255,.08);
+}
+
+.property-bottom{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    padding-top:17px;
+}
+
+.property-price{
+    color:var(--green);
+
+    font-size:19px;
+
+    font-weight:900;
+}
+
+.view-btn{
+    border:none;
+
+    background:transparent;
+
+    color:var(--green);
+
+    font-size:13px;
+
+    font-weight:900;
+
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   ABOUT
+===================================================== */
+
+.about{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    align-items:center;
+
+    gap:70px;
+}
+
+.about-images{
+    position:relative;
+
+    min-height:570px;
+}
+
+.about-main{
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:78%;
+    height:470px;
+
+    object-fit:cover;
+
+    border-radius:20px;
+
+    box-shadow:0 25px 50px rgba(0,0,0,.16);
+
+    transition:.7s ease;
+}
+
+.about-small{
+    position:absolute;
+
+    right:0;
+    bottom:0;
+
+    width:48%;
+    height:250px;
+
+    object-fit:cover;
+
+    border:8px solid var(--off-white);
+
+    border-radius:18px;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.2);
+
+    transition:.7s ease;
+}
+
+body.dark .about-small{
+    border-color:#070908;
+}
+
+.about-images:hover .about-main{
+    transform:translate(-8px,-8px);
+}
+
+.about-images:hover .about-small{
+    transform:translate(8px,8px);
+}
+
+.about-content h2{
+    font-size:clamp(36px,4.5vw,58px);
+
+    line-height:1;
+
+    letter-spacing:-2px;
+
+    margin-bottom:22px;
+}
+
+.about-content h2 span{
+    color:var(--green);
+}
+
+.about-content p{
+    color:var(--gray);
+
+    margin-bottom:18px;
+}
+
+body.dark .about-content p{
+    color:#a9b2ad;
+}
+
+.check-list{
+    list-style:none;
+
+    display:grid;
+
+    gap:12px;
+
+    margin:25px 0 30px;
+}
+
+.check-list li{
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    font-size:14px;
+    font-weight:700;
+}
+
+.check-list li::before{
+    content:"✓";
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:25px;
+    height:25px;
+
+    background:rgba(31,143,85,.12);
+
+    color:var(--green);
+
+    border-radius:50%;
+
+    font-weight:900;
+}
+
+
+/* =====================================================
+   SERVICES
+===================================================== */
+
+.services-section{
+    background:#eaf0eb;
+}
+
+body.dark .services-section{
+    background:#0b0f0d;
+}
+
+.services-grid{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:22px;
+}
+
+.service{
+    padding:35px;
+
+    background:white;
+
+    border-radius:15px;
+
+    border:1px solid rgba(0,0,0,.05);
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:.4s ease;
+}
+
+body.dark .service{
+    background:#121714;
+    border-color:rgba(255,255,255,.06);
+}
+
+.service::before{
+    content:"";
+
+    position:absolute;
+
+    width:0;
+    height:0;
+
+    border-radius:50%;
+
+    background:rgba(31,143,85,.1);
+
+    right:-60px;
+    bottom:-60px;
+
+    transition:.6s ease;
+}
+
+.service:hover::before{
+    width:220px;
+    height:220px;
+}
+
+.service:hover{
+    transform:translateY(-8px);
+}
+
+.service-number{
+    color:var(--green);
+
+    font-weight:900;
+
+    font-size:13px;
+
+    margin-bottom:35px;
+}
+
+.service h3{
+    font-size:22px;
+
+    margin-bottom:10px;
+}
+
+.service p{
+    color:var(--gray);
+
+    font-size:14px;
+}
+
+body.dark .service p{
+    color:#a9b2ad;
+}
+
+
+/* =====================================================
+   LUXURY CTA
+===================================================== */
+
+.luxury-cta{
+    position:relative;
+
+    min-height:500px;
+
+    display:flex;
+    align-items:center;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(5,9,7,.92),
+            rgba(5,9,7,.55)
+        ),
+        url("https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85")
+        center/cover no-repeat;
+}
+
+.luxury-content{
+    max-width:650px;
+
+    color:white;
+
+    position:relative;
+    z-index:2;
+}
+
+.luxury-content .section-label{
+    color:var(--green-light);
+}
+
+.luxury-content h2{
+    font-size:clamp(40px,5vw,68px);
+
+    line-height:.98;
+
+    letter-spacing:-3px;
+
+    margin-bottom:20px;
+}
+
+.luxury-content p{
+    color:#d3d8d5;
+
+    margin-bottom:28px;
+
+    max-width:570px;
+}
+
+
+/* =====================================================
+   CONTACT
+===================================================== */
+
+.contact{
+    display:grid;
+
+    grid-template-columns:.8fr 1.2fr;
+
+    gap:50px;
+}
+
+.contact-info h2{
+    font-size:45px;
+
+    line-height:1;
+
+    letter-spacing:-2px;
+
+    margin-bottom:18px;
+}
+
+.contact-info h2 span{
+    color:var(--green);
+}
+
+.contact-info > p{
+    color:var(--gray);
+
+    margin-bottom:30px;
+}
+
+.contact-list{
+    display:grid;
+    gap:20px;
+}
+
+.contact-item{
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+}
+
+.contact-icon{
+    width:45px;
+    height:45px;
+
+    border-radius:9px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(31,143,85,.1);
+
+    color:var(--green);
+
+    font-size:18px;
+}
+
+.contact-item strong{
+    display:block;
+    font-size:14px;
+}
+
+.contact-item span{
+    color:var(--gray);
+    font-size:13px;
+}
+
+.contact-form{
+    background:white;
+
+    padding:35px;
+
+    border-radius:17px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.07);
+}
+
+body.dark .contact-form{
+    background:#111512;
+}
+
+.form-row{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    margin-bottom:7px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #d9dedb;
+
+    border-radius:7px;
+
+    outline:none;
+
+    background:transparent;
+
+    color:inherit;
+}
+
+body.dark .form-group input,
+body.dark .form-group textarea,
+body.dark .form-group select{
+    border-color:#303832;
+}
+
+.form-group textarea{
+    height:130px;
+
+    resize:none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+    border-color:var(--green);
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+    background:#080a09;
+
+    color:white;
+
+    padding:40px 7%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.footer-logo{
+    font-size:22px;
+    font-weight:900;
+}
+
+.footer-logo span{
+    color:var(--green-light);
+}
+
+.footer-copy{
+    color:#858c87;
+
+    font-size:12px;
+}
+
+.footer-links{
+    display:flex;
+    gap:20px;
+
+    font-size:13px;
+}
+
+.footer-links a:hover{
+    color:var(--green-light);
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+    position:fixed;
+
+    right:25px;
+    bottom:25px;
+
+    background:#111512;
+
+    color:white;
+
+    padding:14px 20px;
+
+    border-left:4px solid var(--green);
+
+    border-radius:7px;
+
+    z-index:5000;
+
+    transform:translateY(100px);
+
+    opacity:0;
+
+    transition:.4s ease;
+}
+
+.toast.show{
+    transform:translateY(0);
+
+    opacity:1;
+}
+
+
+/* =====================================================
+   REVEAL ANIMATION
+===================================================== */
+
+.reveal{
+    opacity:0;
+
+    transform:translateY(60px) scale(.97);
+
+    transition:
+        opacity .9s ease,
+        transform .9s cubic-bezier(.2,.8,.2,1);
+}
+
+.reveal.active{
+    opacity:1;
+
+    transform:translateY(0) scale(1);
+}
+
+
+/* =====================================================
+   STAGGER ANIMATION
+===================================================== */
+
+.property-card:nth-child(2){
+    transition-delay:.08s;
+}
+
+.property-card:nth-child(3){
+    transition-delay:.16s;
+}
+
+.property-card:nth-child(4){
+    transition-delay:.24s;
+}
+
+.property-card:nth-child(5){
+    transition-delay:.32s;
+}
+
+.property-card:nth-child(6){
+    transition-delay:.40s;
+}
+
+
+/* =====================================================
+   KEYFRAMES
+===================================================== */
+
+@keyframes heroText{
+
+    from{
+        opacity:0;
+        transform:translateX(-60px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
+
+@keyframes heroImage{
+
+    from{
+        opacity:0;
+        transform:translateX(60px) scale(.94);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0) scale(1);
+    }
+
+}
+
+@keyframes orbFloat{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(-35px,30px);
+    }
+
+}
+
+@keyframes badgeFloat{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+
+}
+
+@keyframes shine{
+
+    0%{
+        transform:translateX(-130%);
+    }
+
+    50%,100%{
+        transform:translateX(130%);
+    }
+
+}
+
+@keyframes loaderMove{
+
+    0%{
+        transform:translateX(-150%);
+    }
+
+    100%{
+        transform:translateX(500%);
+    }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1000px){
+
+    .nav-links{
+        gap:18px;
+    }
+
+    .hero{
+        grid-template-columns:1fr;
+    }
+
+    .hero-visual{
+        order:-1;
+    }
+
+    .hero-image{
+        height:470px;
+    }
+
+    .property-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .about{
+        grid-template-columns:1fr;
+    }
+
+    .services-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .contact{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+@media(max-width:750px){
+
+    .navbar{
+        padding:15px 5%;
+    }
+
+    .nav-links{
+        position:absolute;
+
+        top:75px;
+        left:5%;
+
+        width:90%;
+
+        background:white;
+
+        padding:25px;
+
+        border-radius:14px;
+
+        box-shadow:0 20px 40px rgba(0,0,0,.12);
+
+        display:none;
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+    }
+
+    body.dark .nav-links{
+        background:#111512;
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .hero{
+        padding-left:5%;
+        padding-right:5%;
+        padding-top:120px;
+    }
+
+    section:not(.hero):not(.stats){
+        padding:80px 5%;
+    }
+
+    .hero-image{
+        height:390px;
+    }
+
+    .hero-badge{
+        left:15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stat{
+        border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .property-grid{
+        grid-template-columns:1fr;
+    }
+
+    .property-tools{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .property-search{
+        width:100%;
+    }
+
+    .property-search input{
+        width:100%;
+    }
+
+    .about-images{
+        min-height:450px;
+    }
+
+    .about-main{
+        height:380px;
+    }
+
+    .about-small{
+        height:190px;
+    }
+
+    .services-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+@media(max-width:500px){
+
+    .logo{
+        font-size:20px;
+    }
+
+    .theme-switch{
+        width:56px;
+        height:30px;
+    }
+
+    .theme-switch.active::before{
+        left:29px;
+    }
+
+    .hero h1{
+        font-size:48px;
+        letter-spacing:-2.5px;
+    }
+
+    .hero-image{
+        height:330px;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+    }
+
+    .hero-buttons .btn{
+        width:100%;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .stat{
+        border-right:none;
+    }
+
+    .about-images{
+        min-height:370px;
+    }
+
+    .about-main{
+        width:82%;
+        height:310px;
+    }
+
+    .about-small{
+        width:50%;
+        height:160px;
+    }
+
+    .luxury-cta{
+        min-height:450px;
+    }
+
+    .contact-form{
+        padding:22px;
+    }
+
+    footer{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     LOADER
+===================================================== -->
+
+<div class="loader" id="loader">
+
+    <div class="loader-inner">
+
+        <div class="loader-logo">
+            Cletus <span>Real-Estate</span>
+        </div>
+
+        <div class="loader-line"></div>
+
+    </div>
+
+</div>
+
+
+<!-- SCROLL PROGRESS -->
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <a href="#home" class="logo">
+        Cletus <span>Real-Estate</span>
+    </a>
+
+
+    <nav>
+
+        <ul class="nav-links" id="navLinks">
+
+            <li>
+                <a href="#home">Home</a>
+            </li>
+
+            <li>
+                <a href="#properties">Properties</a>
+            </li>
+
+            <li>
+                <a href="#about">About</a>
+            </li>
+
+            <li>
+                <a href="#services">Services</a>
+            </li>
+
+            <li>
+                <a href="#contact">Contact</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="nav-right">
+
+        <!-- LEFT / RIGHT DARK MODE SWITCH -->
+
+        <button
+            class="theme-switch"
+            id="themeSwitch"
+            aria-label="Toggle dark mode">
+        </button>
+
+        <button
+            class="menu-btn"
+            id="menuBtn">
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="home">
+
+    <div class="hero-orb"></div>
+    <div class="hero-orb two"></div>
+
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+            PREMIUM REAL ESTATE
+        </div>
+
+        <h1>
+            Find A Place
+            Worth
+            <span>Calling Home.</span>
+        </h1>
+
+        <p>
+            Discover exceptional homes, modern residences
+            and investment properties selected for people
+            who expect more from where they live.
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+                href="#properties"
+                class="btn btn-green">
+
+                Explore Properties
+
+            </a>
+
+
+            <a
+                href="#contact"
+                class="btn btn-dark">
+
+                Talk To An Agent
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-visual">
+
+        <div class="hero-image-wrap">
+
+            <img
+                class="hero-image"
+                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=90"
+                alt="Luxury modern house">
+
+        </div>
+
+
+        <div class="hero-badge">
+
+            <strong>120+</strong>
+
+            <span>
+                Premium properties
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STATS
+===================================================== -->
+
+<section class="stats">
+
+    <div class="stat">
+
+        <div
+            class="stat-number counter"
+            data-target="120">
+            0
+        </div>
+
+        <p>Luxury Properties</p>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            class="stat-number counter"
+            data-target="85">
+            0
+        </div>
+
+        <p>Happy Clients</p>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            class="stat-number counter"
+            data-target="12">
+            0
+        </div>
+
+        <p>Prime Locations</p>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            class="stat-number counter"
+            data-target="8">
+            0
+        </div>
+
+        <p>Years Experience</p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROPERTIES
+===================================================== -->
+
+<section id="properties">
+
+    <div class="section-top reveal">
+
+        <div class="section-label">
+            FEATURED COLLECTION
+        </div>
+
+        <h2>
+            Properties That
+            <span style="color:var(--green);">
+                Stand Apart.
+            </span>
+        </h2>
+
+        <p>
+            Explore a carefully selected collection of
+            contemporary homes and premium residences.
+        </p>
+
+    </div>
+
+
+    <div class="property-tools">
+
+        <div class="filter-buttons">
+
+            <button
+                class="filter-btn active"
+                data-filter="all">
+                All
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="villa">
+                Villas
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="mansion">
+                Mansions
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="apartment">
+                Apartments
+            </button>
+
+        </div>
+
+
+        <div class="property-search">
+
+            <input
+                type="text"
+                id="propertySearch"
+                placeholder="Search properties...">
+
+            <button id="searchBtn">
+                🔍
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="property-grid" id="propertyGrid">
+
+
+        <!-- PROPERTY 1 -->
+
+        <article
+            class="property-card reveal"
+            data-type="villa"
+            data-name="emerald villa">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85"
+                    alt="Emerald luxury villa">
+
+                <span class="property-tag">
+                    Featured
+                </span>
+
+                <button
+                    class="save-btn"
+                    aria-label="Save property">
+                    ♡
+                </button>
+
+            </div>
+
+            <div class="property-info">
+
+                <h3>
+                    Emerald Villa
+                </h3>
+
+                <div class="property-location">
+                    📍 Maitama, Abuja
+                </div>
+
+                <div class="property-details">
+
+                    <span>🛏 5 Beds</span>
+                    <span>🚿 6 Baths</span>
+                    <span>▣ 620 m²</span>
+
+                </div>
+
+                <div class="property-bottom">
+
+                    <div class="property-price">
+                        ₦450M
+                    </div>
+
+                    <button
+                        class="view-btn"
+                        onclick="showProperty('Emerald Villa')">
+                        View Property →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PROPERTY 2 -->
+
+        <article
+            class="property-card reveal"
+            data-type="mansion"
+            data-name="greenwood mansion">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85"
+                    alt="Greenwood luxury mansion">
+
+                <span class="property-tag">
+                    Luxury
+                </span>
+
+                <button
+                    class="save-btn"
+                    aria-label="Save property">
+                    ♡
+                </button>
+
+            </div>
+
+            <div class="property-info">
+
+                <h3>
+                    Greenwood Mansion
+                </h3>
+
+                <div class="property-location">
+                    📍 Asokoro, Abuja
+                </div>
+
+                <div class="property-details">
+
+                    <span>🛏 7 Beds</span>
+                    <span>🚿 8 Baths</span>
+                    <span>▣ 900 m²</span>
+
+                </div>
+
+                <div class="property-bottom">
+
+                    <div class="property-price">
+                        ₦780M
+                    </div>
+
+                    <button
+                        class="view-btn"
+                        onclick="showProperty('Greenwood Mansion')">
+                        View Property →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PROPERTY 3 -->
+
+        <article
+            class="property-card reveal"
+            data-type="apartment"
+            data-name="skyline residence">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=85"
+                    alt="Skyline luxury residence">
+
+                <span class="property-tag">
+                    New
+                </span>
+
+                <button
+                    class="save-btn"
+                    aria-label="Save property">
+                    ♡
+                </button>
+
+            </div>
+
+            <div class="property-info">
+
+                <h3>
+                    Skyline Residence
+                </h3>
+
+                <div class="property-location">
+                    📍 Wuse 2, Abuja
+                </div>
+
+                <div class="property-details">
+
+                    <span>🛏 4 Beds</span>
+                    <span>🚿 4 Baths</span>
+                    <span>▣ 350 m²</span>
+
+                </div>
+
+                <div class="property-bottom">
+
+                    <div class="property-price">
+                        ₦210M
+                    </div>
+
+                    <button
+                        class="view-btn"
+                        onclick="showProperty('Skyline Residence')">
+                        View Property →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PROPERTY 4 -->
+
+        <article
+            class="property-card reveal"
+            data-type="villa"
+            data-name="forest edge villa">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85"
+                    alt="Forest Edge Villa">
+
+                <span class="property-tag">
+                    Exclusive
+                </span>
+
+                <button
+                    class="save-btn"
+                    aria-label="Save property">
+                    ♡
+                </button>
+
+            </div>
+
+            <div class="property-info">
+
+                <h3>
+                    Forest Edge Villa
+                </h3>
+
+                <div class="property-location">
+                    📍 Katampe, Abuja
+                </div>
+
+                <div class="property-details">
+
+                    <span>🛏 5 Beds</span>
+                    <span>🚿 5 Baths</span>
+                    <span>▣ 540 m²</span>
+
+                </div>
+
+                <div class="property-bottom">
+
+                    <div class="property-price">
+                        ₦390M
+                    </div>
+
+                    <button
+                        class="view-btn"
+                        onclick="showProperty('Forest Edge Villa')">
+                        View Property →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PROPERTY 5 -->
+
+        <article
+            class="property-card reveal"
+            data-type="mansion"
+            data-name="blackwood estate">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1000&q=85"
+                    alt="Blackwood luxury estate">
+
+                <span class="property-tag">
+                    Premium
+                </span>
+
+                <button
+                    class="save-btn"
+                    aria-label="Save property">
+                    ♡
+                </button>
+
+            </div>
+
+            <div class="property-info">
+
+                <h3>
+                    Blackwood Estate
+                </h3>
+
+                <div class="property-location">
+                    📍 Guzape, Abuja
+                </div>
+
+                <div class="property-details">
+
+                    <span>🛏 6 Beds</span>
+                    <span>🚿 7 Baths</span>
+                    <span>▣ 760 m²</span>
+
+                </div>
+
+                <div class="property-bottom">
+
+                    <div class="property-price">
+                        ₦590M
+                    </div>
+
+                    <button
+                        class="view-btn"
+                        onclick="showProperty('Blackwood Estate')">
+                        View Property →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- PROPERTY 6 -->
+
+        <article
+            class="property-card reveal"
+            data-type="apartment"
+            data-name="garden heights">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85"
+                    alt="Garden Heights apartment">
+
+                <span class="property-tag">
+                    Modern
+                </span>
+
+                <button
+                    class="save-btn"
+                    aria-label="Save property">
+                    ♡
+                </button>
+
+            </div>
+
+            <div class="property-info">
+
+                <h3>
+                    Garden Heights
+                </h3>
+
+                <div class="property-location">
+                    📍 Jabi, Abuja
+                </div>
+
+                <div class="property-details">
+
+                    <span>🛏 3 Beds</span>
+                    <span>🚿 3 Baths</span>
+                    <span>▣ 280 m²</span>
+
+                </div>
+
+                <div class="property-bottom">
+
+                    <div class="property-price">
+                        ₦175M
+                    </div>
+
+                    <button
+                        class="view-btn"
+                        onclick="showProperty('Garden Heights')">
+                        View Property →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section id="about">
+
+    <div class="about">
+
+
+        <div class="about-images reveal">
+
+            <img
+                class="about-main"
+                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85"
+                alt="Luxury modern property">
+
+            <img
+                class="about-small"
+                src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=85"
+                alt="Luxury home exterior">
+
+        </div>
+
+
+        <div class="about-content reveal">
+
+            <div class="section-label">
+                WHY CLETUS REAL-ESTATE
+            </div>
+
+            <h2>
+                We Don't Just
+                Find Houses.
+                We Find
+                <span>Possibilities.</span>
+            </h2>
+
+            <p>
+                Cletus Real-Estate connects clients with
+                exceptional properties designed around
+                comfort, lifestyle and long-term value.
+            </p>
+
+            <p>
+                Our approach combines detailed property
+                selection with a modern client experience,
+                making the search for your next home
+                simple and memorable.
+            </p>
+
+
+            <ul class="check-list">
+
+                <li>
+                    Carefully selected properties
+                </li>
+
+                <li>
+                    Premium locations
+                </li>
+
+                <li>
+                    Professional property guidance
+                </li>
+
+                <li>
+                    Client-focused service
+                </li>
+
+            </ul>
+
+
+            <a
+                href="#contact"
+                class="btn btn-green">
+
+                Speak With Us
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SERVICES
+===================================================== -->
+
+<section
+    class="services-section"
+    id="services">
+
+    <div class="section-top reveal">
+
+        <div class="section-label">
+            WHAT WE DO
+        </div>
+
+        <h2>
+            Real Estate,
+            <span style="color:var(--green);">
+                Simplified.
+            </span>
+        </h2>
+
+        <p>
+            From finding your ideal property to helping
+            you make confident decisions, we keep the
+            process straightforward.
+        </p>
+
+    </div>
+
+
+    <div class="services-grid">
+
+
+        <div class="service reveal">
+
+            <div class="service-number">
+                01 / PROPERTY SALES
+            </div>
+
+            <h3>
+                Buy Your Next Home
+            </h3>
+
+            <p>
+                Explore carefully selected residential
+                properties suited to your lifestyle,
+                location and budget.
+            </p>
+
+        </div>
+
+
+        <div class="service reveal">
+
+            <div class="service-number">
+                02 / PROPERTY RENTALS
+            </div>
+
+            <h3>
+                Find A Place To Rent
+            </h3>
+
+            <p>
+                Discover stylish apartments, villas and
+                residences available for comfortable living.
+            </p>
+
+        </div>
+
+
+        <div class="service reveal">
+
+            <div class="service-number">
+                03 / INVESTMENT
+            </div>
+
+            <h3>
+                Invest In Property
+            </h3>
+
+            <p>
+                Explore property opportunities with a
+                focus on location, quality and potential.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     LUXURY CTA
+===================================================== -->
+
+<section class="luxury-cta">
+
+    <div class="luxury-content reveal">
+
+        <div class="section-label">
+            THE LUXURY COLLECTION
+        </div>
+
+        <h2>
+            Your Next Address
+            Could Be Exceptional.
+        </h2>
+
+        <p>
+            Step into homes designed to impress,
+            inspire and give you the lifestyle you've
+            always imagined.
+        </p>
+
+        <a
+            href="#properties"
+            class="btn btn-green">
+
+            Explore Luxury Homes
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section id="contact">
+
+    <div class="contact">
+
+
+        <div class="contact-info reveal">
+
+            <div class="section-label">
+                GET IN TOUCH
+            </div>
+
+            <h2>
+                Let's Find
+                Your
+                <span>Next Home.</span>
+            </h2>
+
+            <p>
+                Tell us what you're looking for and
+                we'll help you take the next step.
+            </p>
+
+
+            <div class="contact-list">
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📍
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Office
+                        </strong>
+
+                        <span>
+                            Abuja, Nigeria
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📞
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Phone
+                        </strong>
+
+                        <span>
+                            +234 800 000 0000
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ✉
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Email
+                        </strong>
+
+                        <span>
+                            hello@cletusrealestate.com
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form
+            class="contact-form reveal"
+            id="contactForm">
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Your Name
+                    </label>
+
+                    <input
+                        type="text"
+                        placeholder="Enter your name"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <input
+                        type="tel"
+                        placeholder="+234..."
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    placeholder="you@example.com"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Property Type
+                </label>
+
+                <select required>
+
+                    <option value="">
+                        Select property type
+                    </option>
+
+                    <option>
+                        Villa
+                    </option>
+
+                    <option>
+                        Mansion
+                    </option>
+
+                    <option>
+                        Apartment
+                    </option>
+
+                    <option>
+                        Land
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Message
+                </label>
+
+                <textarea
+                    placeholder="Tell us what you're looking for..."
+                    required></textarea>
+
+            </div>
+
+
+            <button
+                class="btn btn-green"
+                type="submit">
+
+                Send Property Request →
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="footer-logo">
+        Cletus <span>Real-Estate</span>
+    </div>
+
+    <div class="footer-copy">
+        © 2026 Cletus Real-Estate. All rights reserved.
+    </div>
+
+    <div class="footer-links">
+
+        <a href="#home">
+            Home
+        </a>
+
+        <a href="#properties">
+            Properties
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+    </div>
+
+</footer>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast">
+</div>
+
+
+<script>
+
+/* =====================================================
+   LOADER
+===================================================== */
+
+window.addEventListener("load", function(){
+
+    setTimeout(function(){
+
+        document
+            .getElementById("loader")
+            .classList.add("hide");
+
+    }, 900);
+
+});
+
+
+/* =====================================================
+   MOBILE MENU
+===================================================== */
+
+const menuBtn =
+    document.getElementById("menuBtn");
+
+const navLinks =
+    document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", function(){
+
+    navLinks.classList.toggle("active");
+
+    if(navLinks.classList.contains("active")){
+
+        menuBtn.textContent = "✕";
+
+    }else{
+
+        menuBtn.textContent = "☰";
+
+    }
+
+});
+
+
+document
+    .querySelectorAll(".nav-links a")
+    .forEach(function(link){
+
+        link.addEventListener("click", function(){
+
+            navLinks.classList.remove("active");
+
+            menuBtn.textContent = "☰";
+
+        });
+
+    });
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+const themeSwitch =
+    document.getElementById("themeSwitch");
+
+themeSwitch.addEventListener("click", function(){
+
+    document.body.classList.toggle("dark");
+
+    themeSwitch.classList.toggle("active");
+
+});
+
+
+/* =====================================================
+   SCROLL PROGRESS
+===================================================== */
+
+window.addEventListener("scroll", function(){
+
+    const scrollTop =
+        window.scrollY;
+
+    const documentHeight =
+        document.documentElement.scrollHeight
+        - window.innerHeight;
+
+    const progress =
+        (scrollTop / documentHeight) * 100;
+
+    document
+        .getElementById("scrollProgress")
+        .style.width =
+        progress + "%";
+
+});
+
+
+/* =====================================================
+   REVEAL ANIMATION
+===================================================== */
+
+const revealElements =
+    document.querySelectorAll(".reveal");
+
+const revealObserver =
+    new IntersectionObserver(
+
+        function(entries){
+
+            entries.forEach(function(entry){
+
+                if(entry.isIntersecting){
+
+                    entry.target
+                        .classList
+                        .add("active");
+
+                    revealObserver
+                        .unobserve(entry.target);
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.12
+        }
+
+    );
+
+
+revealElements.forEach(function(element){
+
+    revealObserver.observe(element);
+
+});
+
+
+/* =====================================================
+   COUNTERS
+===================================================== */
+
+let countersStarted = false;
+
+const statsSection =
+    document.querySelector(".stats");
+
+const counterObserver =
+    new IntersectionObserver(
+
+        function(entries){
+
+            if(
+                entries[0].isIntersecting &&
+                !countersStarted
+            ){
+
+                countersStarted = true;
+
+                document
+                    .querySelectorAll(".counter")
+                    .forEach(function(counter){
+
+                        const target =
+                            Number(
+                                counter.dataset.target
+                            );
+
+                        let current = 0;
+
+                        const increment =
+                            Math.max(
+                                1,
+                                Math.ceil(target / 50)
+                            );
+
+                        const timer =
+                            setInterval(function(){
+
+                                current += increment;
+
+                                if(current >= target){
+
+                                    current = target;
+
+                                    clearInterval(timer);
+
+                                }
+
+                                counter.textContent =
+                                    current + "+";
+
+                            },30);
+
+                    });
+
+            }
+
+        },
+
+        {
+            threshold:.4
+        }
+
+    );
+
+counterObserver.observe(statsSection);
+
+
+/* =====================================================
+   PROPERTY FILTER
+===================================================== */
+
+const filterButtons =
+    document.querySelectorAll(".filter-btn");
+
+const propertyCards =
+    document.querySelectorAll(".property-card");
+
+filterButtons.forEach(function(button){
+
+    button.addEventListener("click", function(){
+
+        filterButtons.forEach(function(btn){
+
+            btn.classList.remove("active");
+
+        });
+
+        button.classList.add("active");
+
+        const filter =
+            button.dataset.filter;
+
+        propertyCards.forEach(function(card){
+
+            if(
+                filter === "all" ||
+                card.dataset.type === filter
+            ){
+
+                card.style.display = "block";
+
+                setTimeout(function(){
+
+                    card.style.opacity = "1";
+                    card.style.transform = "";
+
+                },20);
+
+            }else{
+
+                card.style.opacity = "0";
+                card.style.transform =
+                    "scale(.9)";
+
+                setTimeout(function(){
+
+                    card.style.display = "none";
+
+                },300);
+
+            }
+
+        });
+
+    });
+
+});
+
+
+/* =====================================================
+   PROPERTY SEARCH
+===================================================== */
+
+const searchInput =
+    document.getElementById("propertySearch");
+
+const searchBtn =
+    document.getElementById("searchBtn");
+
+
+function searchProperties(){
+
+    const query =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+    propertyCards.forEach(function(card){
+
+        const name =
+            card.dataset.name;
+
+        if(
+            query === "" ||
+            name.includes(query)
+        ){
+
+            card.style.display = "block";
+
+            setTimeout(function(){
+
+                card.style.opacity = "1";
+
+            },20);
+
+        }else{
+
+            card.style.opacity = "0";
+
+            setTimeout(function(){
+
+                card.style.display = "none";
+
+            },300);
+
+        }
+
+    });
+
+}
+
+
+searchBtn.addEventListener(
+    "click",
+    searchProperties
+);
+
+
+searchInput.addEventListener(
+    "keyup",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            searchProperties();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   SAVE PROPERTY
+===================================================== */
+
+document
+    .querySelectorAll(".save-btn")
+    .forEach(function(button){
+
+        button.addEventListener(
+            "click",
+            function(){
+
+                button.classList.toggle("saved");
+
+                if(button.classList.contains("saved")){
+
+                    button.textContent = "♥";
+
+                    showToast(
+                        "Property saved to your favourites."
+                    );
+
+                }else{
+
+                    button.textContent = "♡";
+
+                    showToast(
+                        "Property removed from favourites."
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* =====================================================
+   PROPERTY BUTTON
+===================================================== */
+
+function showProperty(propertyName){
+
+    showToast(
+        propertyName +
+        " selected. Contact Cletus Real-Estate for details."
+    );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(function(){
+
+            toast.classList.remove("show");
+
+        },2800);
+
+}
+
+
+/* =====================================================
+   CONTACT FORM
+===================================================== */
+
+document
+    .getElementById("contactForm")
+    .addEventListener(
+        "submit",
+        function(event){
+
+            event.preventDefault();
+
+            showToast(
+                "Property request submitted successfully!"
+            );
+
+            event.target.reset();
+
+        }
+    );
+
+
+/* =====================================================
+   HERO PARALLAX
+===================================================== */
+
+window.addEventListener("scroll", function(){
+
+    const heroImage =
+        document.querySelector(".hero-image");
+
+    const scroll =
+        window.scrollY;
+
+    if(scroll < window.innerHeight){
+
+        heroImage.style.transform =
+            "translateY(" +
+            (scroll * .08) +
+            "px)";
+
+    }
+
+});
+
+
+/* =====================================================
+   MOUSE TILT FOR PROPERTY CARDS
+===================================================== */
+
+if(window.matchMedia(
+    "(hover: hover) and (pointer: fine)"
+).matches){
+
+    document
+        .querySelectorAll(".property-card")
+        .forEach(function(card){
+
+            card.addEventListener(
+                "mousemove",
+                function(event){
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+                    const x =
+                        event.clientX - rect.left;
+
+                    const y =
+                        event.clientY - rect.top;
+
+                    const centerX =
+                        rect.width / 2;
+
+                    const centerY =
+                        rect.height / 2;
+
+                    const rotateX =
+                        ((y - centerY) / centerY) * -3;
+
+                    const rotateY =
+                        ((x - centerX) / centerX) * 3;
+
+                    card.style.transform =
+                        "translateY(-12px) " +
+                        "rotateX(" +
+                        rotateX +
+                        "deg) rotateY(" +
+                        rotateY +
+                        "deg)";
+
+                }
+            );
+
+
+            card.addEventListener(
+                "mouseleave",
+                function(){
+
+                    card.style.transform = "";
+
+                }
+            );
+
+        });
+
+}
+
+</script>
+
+</body>
+</html>
